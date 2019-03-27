@@ -1,3 +1,3 @@
-#App Inscription Course
+# inscription-course
 
-´´´npm install´´´
+```npm install``#
