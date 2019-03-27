@@ -40,7 +40,6 @@ hbs.registerHelper('listarSelect', () => {
 // crear curso
 hbs.registerHelper('crearCurso', (nombre, codigo, descripcion, modalidad, valor, estado, duracion) => {
     listaCursos = require('../files/cursos.json');
-    // listarCursos();
     let curso = {
         nombre: nombre,
         codigo: codigo,
@@ -132,30 +131,33 @@ hbs.registerHelper('mostrarEst', () => {
 
 //collapse cursos con estudiantes
 hbs.registerHelper('mostrarCursosEst', () => {
-    listaCursosEstudiantes = require('../files/cursos-estudiantes.json');
-    let texto = "<div class='accordion' id='accordionCursos'>";
-    let i = 1;
-    listaCursosEstudiantes.forEach(data => {
-        texto = texto + `   <div class="card">
-                                <div class="card-header" id="heading${i}">
-                                    <h5 class="mb-0">
-                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse${i}" aria-expanded="true" aria-controls="collapse${i}">
-                                            Curso: ${data.curso_id} 
-                                        </button>
-                                    </h5>
-                                </div>
-                            
-                                <div id="collapse${i}" class="collapse" aria-labelledby="heading${i}" data-parent="#accordionExample">
-                                    <div class="card-body">
-                                    <b>Estudiante:</b> ${data.estudiante_id}<br> 
-                                    </div>
-                                </div>
-                            </div>`
-        i = i + 1;
+    listaCursos = require('../files/cursos.json');
+    let texto = "<div class=col-md-12>";
+    let estudiante;
+    listaCursos.forEach(curso => {
+        estudiante = agregarEstCurso(curso.codigo);
+        console.log('estudiante', estudiante);
+        texto = texto +
+            `<p> ${curso.nombre} </p>
+            ${estudiante}
+            `
     });
     texto = texto + "</div>"
     return texto;
 });
+
+function agregarEstCurso(cod) {
+    console.log('codigo ingresado', cod);
+    listaCursosEstudiantes = require('../files/cursos-estudiantes.json');
+    listaCursosEstudiantes.forEach(est => {
+        if (est.curso_id == cod) {
+            console.log(est.estudiante_id);
+            mostrarInfoEstudiante(est.estudiante_id);
+            console.log(mostrarInfoEstudiante(est.estudiante_id));
+            return mostrarInfoEstudiante(est.estudiante_id);
+        }
+    });
+}
 
 //listadoEstudiantes
 function listarEstudiantes() {
