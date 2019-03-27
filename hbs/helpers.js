@@ -3,6 +3,7 @@ const fs = require('fs');
 // const data = fs.readFileSync('./files/cursos.json');
 listaCursos = [];
 listaEstudiantes = [];
+listaCursosEstudiantes = [];
 
 // ============ Cursos ============ //
 
@@ -12,8 +13,8 @@ hbs.registerHelper('listarCur', () => {
     let texto = " <table class='table table-bordered'> \ <thead> \ <th> Nombre </th> \ <th> Id </th> \ <th> Descripción </th> \ <th> Modalidad </th> \ <th> Valor </th> \ <th> Estado </th> \ <th> Duración (Horas) </th> \ </thead> \ <tbody>";
     listaCursos.forEach(curso => {
         texto = texto +
-            "<tr>" + "<td>" + curso.nombre + "</td>" +
-            "<td>" + curso.codigo + "</td>" +
+            "<tr>" + "<td>" + curso.codigo + "</td>" +
+            "<td>" + curso.nombre + "</td>" +
             "<td>" + curso.descripcion + "</td>" +
             "<td>" + curso.modalidad + "</td>" +
             "<td>" + curso.valor + "</td>" +
@@ -99,7 +100,7 @@ function listarCursos() {
     } catch (error) {
         listaCursos = [];
     }
-};
+}
 
 //guardar cursos
 function guardar() {
@@ -131,27 +132,22 @@ hbs.registerHelper('mostrarEst', () => {
 
 //collapse cursos con estudiantes
 hbs.registerHelper('mostrarCursosEst', () => {
-    listarCursos();
+    listaCursosEstudiantes = require('../files/cursos-estudiantes.json');
     let texto = "<div class='accordion' id='accordionCursos'>";
     let i = 1;
-    listaCursos.forEach(curso => {
+    listaCursosEstudiantes.forEach(data => {
         texto = texto + `   <div class="card">
                                 <div class="card-header" id="heading${i}">
                                     <h5 class="mb-0">
                                         <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse${i}" aria-expanded="true" aria-controls="collapse${i}">
-                                            Curso: ${curso.nombre} 
+                                            Curso: ${data.curso_id} 
                                         </button>
                                     </h5>
                                 </div>
                             
                                 <div id="collapse${i}" class="collapse" aria-labelledby="heading${i}" data-parent="#accordionExample">
                                     <div class="card-body">
-                                    <b>Id:</b> ${curso.codigo}<br> 
-                                    <b>Descripción:</b> ${curso.descripcion}<br> 
-                                    <b>Modalidad:</b> ${curso.modalidad}<br>
-                                    <b>Valor:</b> ${curso.valor}<br>
-                                    <b>Estado:</b> ${curso.estado}<br>
-                                    <b>Duración (hrs):</b> ${curso.duracion}<br>
+                                    <b>Estudiante:</b> ${data.estudiante_id}<br> 
                                     </div>
                                 </div>
                             </div>`
@@ -168,4 +164,33 @@ function listarEstudiantes() {
     } catch (error) {
         listaCursos = [];
     }
-};
+}
+
+//listadoCursosEstudiantes
+function listarCursosEstudiantes() {
+    try {
+        listaCursosEstudiantes = require('../files/cursos-estudiantes.json');
+    } catch (error) {
+        listaCursosEstudiantes = [];
+    }
+}
+
+function mostrarInfoEstudiante(doc) {
+    listaEstudiantes = require('../files/estudiantes.json');
+    let est = listaEstudiantes.find(buscar => buscar.documento == doc)
+    if (!est) {
+        return 'Estudiante no existe.';
+    } else {
+        return est.nombre;
+    }
+}
+
+function mostrarInfoCurso(cod) {
+    listaCursos = require('../files/cursos.json');
+    let curso = listarCursos.find(buscar => buscar.codigo == cod)
+    if (!curso) {
+        return 'Estudiante no existe.';
+    } else {
+        return curso.nombre;
+    }
+}
