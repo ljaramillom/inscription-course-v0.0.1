@@ -30,7 +30,6 @@ inscription-course
 |--package.json
 |--node_modules
 |--README.md
-|--.gitignore
 ```
 
 - **Ejecución de la aplicación**
@@ -41,6 +40,6 @@ inscription-course
 2. Ejecutar el comando
 ```node server```
 
-3. En el navegador ingresar la url localhost:3000
+3. En el navegador ingresar la url ***localhost:3000***
 
 
