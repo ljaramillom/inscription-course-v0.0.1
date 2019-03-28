@@ -34,12 +34,11 @@ inscription-course
 
 - **Ejecución de la aplicación**
 
-1. Ejecutar el comando
-```npm install```
-
-2. Ejecutar el comando
-```node server```
-
-3. En el navegador ingresar la url **localhost:3000**
+1. Realizar ```npm install``` para descargar las librerías
+2. Ejecutar el siguiente comando para visualizar el listado de los cursos en consola
+```
+node server
+```
+3. Abrir el navegador con la siguiente dirección **http://localhost:3000**
 
 
