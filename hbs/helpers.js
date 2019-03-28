@@ -8,7 +8,7 @@ listaCursosEstudiantes = [];
 // ============ Cursos ============ //
 
 // tabla listar cursos
-hbs.registerHelper('listarCur', () => {
+hbs.registerHelper('listarCursos', () => {
     listaCursos = require('../files/cursos.json');
     let texto = " <table class='table table-bordered'> \ <thead> \ <th> Nombre </th> \ <th> Id </th> \ <th> Descripción </th> \ <th> Modalidad </th> \ <th> Valor </th> \ <th> Estado </th> \ <th> Duración (Horas) </th> \ </thead> \ <tbody>";
     listaCursos.forEach(curso => {
@@ -31,7 +31,7 @@ hbs.registerHelper('listarSelect', () => {
     let texto = "<select class='form-control' name='curso'>";
     listaCursos.forEach(curso => {
         texto = texto +
-            "<option>" + "<td>" + curso.nombre + "</option>"
+            `<option value=${curso.codigo}><td>${curso.nombre}</option>`
     });
     texto = texto + "</select>"
     return texto;
@@ -53,7 +53,7 @@ hbs.registerHelper('crearCurso', (nombre, codigo, descripcion, modalidad, valor,
     if (!duplicate) {
         listaCursos;
         listaCursos.push(curso);
-        guardar();
+        guardarCurso();
         return 'Curso creado exitosamente.';
     } else {
         return 'Ya existe un curso con el mismo ID ingresado.';
@@ -62,7 +62,7 @@ hbs.registerHelper('crearCurso', (nombre, codigo, descripcion, modalidad, valor,
 
 //collapse cursos
 hbs.registerHelper('mostrarCursos', () => {
-    listarCursos();
+    listaCursos = require('../files/cursos.json');
     let texto = "<div class='accordion' id='accordionCursos'>";
     let i = 1;
     listaCursos.forEach(curso => {
@@ -92,22 +92,59 @@ hbs.registerHelper('mostrarCursos', () => {
     return texto;
 });
 
-//listadoCursos
-function listarCursos() {
-    try {
-        listaCursos = require('../files/cursos.json');
-    } catch (error) {
-        listaCursos = [];
-    }
-}
+//collapse cursos con button
+hbs.registerHelper('mostrarCollapse', () => {
+    listaCursos = require('../files/cursos.json');
+    let texto = "<div class='accordion' id='accordionCursos'>";
+    let i = 1;
+    listaCursos.forEach(curso => {
+        texto = texto + `   <div class="card">
+                                <div class="card-header" id="heading${i}">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse${i}" aria-expanded="true" aria-controls="collapse${i}">
+                                            Curso: ${curso.nombre} 
+                                        </button>
+                                    </h5>
+                                </div>
+                            
+                                <div id="collapse${i}" class="collapse" aria-labelledby="heading${i}" data-parent="#accordionExample">
+                                    <div class="card-body">
+                                    <b>Id:</b> ${curso.codigo}<br> 
+                                    <b>Descripción:</b> ${curso.descripcion}<br> 
+                                    <b>Modalidad:</b> ${curso.modalidad}<br>
+                                    <b>Valor:</b> ${curso.valor}<br>
+                                    <b>Estado:</b> ${curso.estado}<br>
+                                    <b>Duración(hrs):</b> ${curso.duracion}<br><br>
+                                    <button type="submit" value=${curso.codigo} name=codigo class="btn btn-primary">Cambiar Estado</button>
+                                    </div>
+                                </div>
+                            </div>`
+        i = i + 1;
+    });
+    texto = texto + "</div>"
+    return texto;
+});
 
 //guardar cursos
-function guardar() {
+function guardarCurso() {
     let datos = JSON.stringify(listaCursos);
     fs.writeFile('./files/cursos.json', datos, (error) => {
         if (error) throw (error);
         return;
     });
+}
+
+//actualizar estado de curso
+const actualizarCurso = (cod) => {
+    listaCursos = require('../files/cursos.json');
+    let curso = listaCursos.find(buscar => buscar.codigo == cod);
+    if (!curso) {
+        return 'Curso no existe.';
+    } else {
+        curso.estado = 'Cerrado';
+        guardarCurso();
+        return 'Curso actualizado exitosamente.'
+    }
 }
 
 // ============ Estudiantes ============ //
@@ -131,45 +168,80 @@ hbs.registerHelper('mostrarEst', () => {
 
 //collapse cursos con estudiantes
 hbs.registerHelper('mostrarCursosEst', () => {
-    listaCursos = require('../files/cursos.json');
-    let texto = "<div class=col-md-12>";
-    let estudiante;
-    listaCursos.forEach(curso => {
-        estudiante = agregarEstCurso(curso.codigo);
-        console.log('estudiante', estudiante);
-        texto = texto +
-            `<p> ${curso.nombre} </p>
-            ${estudiante}
-            `
+    listaCursosEstudiantes = require('../files/cursos-estudiantes.json');
+    let texto = "<div class='accordion' id='accordionCursos'>";
+    let i = 1;
+    listaCursosEstudiantes.forEach(curso => {
+        let nombreCurso = mostrarInfoCurso(curso.curso_id);
+        let nombreEstudiante = mostrarInfoEstudiante(curso.estudiante_id);
+        texto = texto + `<div class="card">
+        <div class="card-header" id="heading${i}">
+            <h5 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse${i}" aria-expanded="true" aria-controls="collapse${i}">
+                    Curso: ${nombreCurso} 
+                </button>
+            </h5>
+        </div>
+        <div id="collapse${i}" class="collapse" aria-labelledby="heading${i}" data-parent="#accordionExample">
+        <div class="card-body">
+        <b>Estudiante:</b> ${nombreEstudiante}<br>
+        </div>
+    </div>
+</div>`
+
     });
+    i = i + 1;
     texto = texto + "</div>"
     return texto;
 });
 
-function agregarEstCurso(cod) {
-    console.log('codigo ingresado', cod);
-    listaCursosEstudiantes = require('../files/cursos-estudiantes.json');
-    listaCursosEstudiantes.forEach(est => {
-        if (est.curso_id == cod) {
-            console.log(est.estudiante_id);
-            mostrarInfoEstudiante(est.estudiante_id);
-            console.log(mostrarInfoEstudiante(est.estudiante_id));
-            return mostrarInfoEstudiante(est.estudiante_id);
-        }
-    });
-}
+// inscripcion
+hbs.registerHelper('inscribirEstudiante', (documento, nombre, apellido, correo, telefono, curso) => {
+    listaEstudiante = require('../files/estudiantes.json');
+    let estudiante = {
+        documento: documento,
+        nombre: nombre,
+        apellido: apellido,
+        correo: correo,
+        telefono: telefono,
+        curso: curso,
+    };
+    let duplicate = listaEstudiante.find(buscar => buscar.curso == curso)
+    if (!duplicate) {
+        listaEstudiante;
+        listaEstudiante.push(estudiante);
+        inscribir();
+        return 'Inscripción realizada exitosamente.';
+    } else {
+        return 'El estudiante ya se encuentra matriculado en el curso.';
+    }
+});
 
-//listadoEstudiantes
-function listarEstudiantes() {
-    try {
-        listaCursos = require('../files/estudiantes.json');
-    } catch (error) {
-        listaCursos = [];
+const agregarEstCurso = (cod) => {
+    listaCursosEstudiantes = require('../files/cursos-estudiantes.json');
+    let est = listaCursosEstudiantes.filter(buscar => buscar.curso_id == cod);
+    let nombre;
+    if (est.length == 0) {
+        return `<span>Ningún estudiante se ha inscrito al curso.</span>`
+    } else {
+        est.forEach(estudiante => {
+            nombre = mostrarInfoEstudiante(estudiante.estudiante_id);
+            `<span>${nombre}</span>`
+        });
     }
 }
 
+//guardar inscripcion
+const inscribir = () => {
+    let datos = JSON.stringify(listaEstudiantes);
+    fs.writeFile('./files/estudiantes.json', datos, (error) => {
+        if (error) throw (error);
+        return;
+    });
+}
+
 //listadoCursosEstudiantes
-function listarCursosEstudiantes() {
+const listarCursosEstudiantes = () => {
     try {
         listaCursosEstudiantes = require('../files/cursos-estudiantes.json');
     } catch (error) {
@@ -177,22 +249,24 @@ function listarCursosEstudiantes() {
     }
 }
 
-function mostrarInfoEstudiante(doc) {
+//mostrar nombre completo de estudiante
+const mostrarInfoEstudiante = (doc) => {
     listaEstudiantes = require('../files/estudiantes.json');
     let est = listaEstudiantes.find(buscar => buscar.documento == doc)
     if (!est) {
-        return 'Estudiante no existe.';
+        return `<span>Estudiante no existe.</span>`;
     } else {
-        return est.nombre;
+        return `<span>${est.nombre} ${est.apellido}</span>`;
     }
 }
 
-function mostrarInfoCurso(cod) {
+//mostrar nombre de curso
+const mostrarInfoCurso = (cod) => {
     listaCursos = require('../files/cursos.json');
-    let curso = listarCursos.find(buscar => buscar.codigo == cod)
+    let curso = listaCursos.find(buscar => buscar.codigo == cod)
     if (!curso) {
-        return 'Estudiante no existe.';
+        return `<span>Curso no existe.</span>`;
     } else {
-        return curso.nombre;
+        return `<span>${curso.nombre}</span>`;
     }
 }

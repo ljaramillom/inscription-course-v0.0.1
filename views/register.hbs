@@ -1,11 +1,10 @@
 {{> head }}
 {{> navbar }}
-
 <div class="container">
     <div class="col-md-12"><br>
         <h1>Inscripción de Curso</h1>
         <br>
-        <form action='/courses' method="GET">
+        <form action='/list-students' method="POST">
         <div class="form-group">
             <div class="form-row">
                 <div class="form-group col-md-4">
@@ -21,28 +20,24 @@
                     <input type="text" name='apellido' class="form-control" placeholder="Apellido">
                 </div>
             </div>
-
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label>Correo Electrónico</label>
                     <input type="email" name='correo' class="form-control" placeholder="usuario@tdea.edu.co" required>
                 </div>
-
                 <div class="form-group col-md-4">
                     <label>Teléfono</label>
                     <input type="text" name='telefono' class="form-control" placeholder="Teléfono">
                 </div>
-
             <div class="form-group col-md-4">
                     <label>Cursos</label>
                     {{{listarSelect}}}
                 </div>
             </div>
-
         </div>
         <button type="submit" class="btn btn-primary">Aceptar</button>
     </form>
     </div>
 </div>
-
+<br><br><br><br>
 {{> footer }}

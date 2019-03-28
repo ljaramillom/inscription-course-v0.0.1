@@ -28,7 +28,7 @@ app.post('/view-course', (req, res) => {
     res.render('view-course', {
         nombre: req.body.nombre,
         codigo: req.body.codigo,
-        descripcion: req.body.descrip,
+        descripcion: req.body.descripcion,
         modalidad: req.body.modalidad,
         valor: req.body.valor,
         estado: 'Disponible',
@@ -36,11 +36,21 @@ app.post('/view-course', (req, res) => {
     });
 });
 
+app.get('/update-course', (req, res) => {
+    res.render('update-course');
+});
+
+app.post('/view-course-updated', (req, res) => {
+    res.render('view-course-updated', {
+        codigo: req.body.codigo,
+    });
+});
+
 app.get('/register', (req, res) => {
     res.render('register');
 });
 
-app.get('/list-students', (req, res) => {
+app.post('/list-students', (req, res) => {
     res.render('list-students', {
         documento: req.body.documento,
         nombre: req.body.nombre,
