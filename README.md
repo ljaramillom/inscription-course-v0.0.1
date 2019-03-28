@@ -35,7 +35,7 @@ inscription-course
 - **Ejecución de la aplicación**
 
 1. Realizar ```npm install``` para descargar las librerías
-2. Ejecutar el siguiente comando para visualizar el listado de los cursos en consola
+2. Ejecutar el siguiente comando en consola
 ```
 node server
 ```
