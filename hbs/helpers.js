@@ -51,6 +51,7 @@ hbs.registerHelper('crearCurso', (nombre, codigo, descripcion, modalidad, valor,
     };
     let duplicate = listaCursos.find(buscar => buscar.codigo == codigo)
     if (!duplicate) {
+        listaCursos;
         listaCursos.push(curso);
         guardarCurso();
         return 'Curso creado exitosamente.';
@@ -153,44 +154,36 @@ hbs.registerHelper('mostrarEst', () => {
     listaEstudiantes = require('../files/estudiantes.json');
     let texto = " <table class='table table-bordered'> \ <thead> \ <th> Documento de Identidad </th> \ <th> Nombre </th> \ <th> Apellido </th> \ <th> Correo Electrónico </th> \ <th> Teléfono </th> \ <th> Curso (Id) </th> \ </thead> \ <tbody>";
     listaEstudiantes.forEach(est => {
+        let nombreCurso = mostrarInfoCurso(est.curso);
         texto = texto +
             "<tr>" + "<td>" + est.documento + "</td>" +
             "<td>" + est.nombre + "</td>" +
             "<td>" + est.apellido + "</td>" +
             "<td>" + est.correo + "</td>" +
             "<td>" + est.telefono + "</td>" +
-            "<td>" + est.curso + "</td>" + "</tr>"
+            "<td>" + nombreCurso + "</td>" + "</tr>"
     });
     texto = texto + "</tbody> </table>"
     return texto;
 });
 
-//collapse cursos con estudiantes
+//listado cursos con estudiantes
 hbs.registerHelper('mostrarCursosEst', () => {
     listaCursosEstudiantes = require('../files/cursos-estudiantes.json');
-    let texto = "<div class='accordion' id='accordionCursos'>";
+    let texto = `<ul>`;
     let i = 1;
     listaCursosEstudiantes.forEach(curso => {
         let nombreCurso = mostrarInfoCurso(curso.curso_id);
-        let nombreEstudiante = mostrarInfoEstudiante(curso.estudiante_id);
-        texto = texto + `<div class="card">
-        <div class="card-header" id="heading${i}">
-            <h5 class="mb-0">
-                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse${i}" aria-expanded="true" aria-controls="collapse${i}">
-                    Curso: ${nombreCurso} 
-                </button>
-            </h5>
-        </div>
-        <div id="collapse${i}" class="collapse" aria-labelledby="heading${i}" data-parent="#accordionExample">
-        <div class="card-body">
-        <b>Estudiante:</b> ${nombreEstudiante}<br>
-        </div>
-    </div>
-</div>`
-
+        let agregar = agregarEstCurso(curso.curso_id);
+        texto = texto + `   <dl>
+                            <dt>
+                            <li type="square">Curso: ${nombreCurso}</li>
+                            <dd>Estudiante: ${agregar}</li></dd>
+                            </dt>
+                            </dl>`
     });
     i = i + 1;
-    texto = texto + "</div>"
+    texto = texto + `</ul>`
     return texto;
 });
 
@@ -212,14 +205,14 @@ hbs.registerHelper('inscribirEstudiante', (documento, nombre, apellido, correo, 
     };
     let duplicate = listaCursosEstudiantes.find(buscar => buscar.estudiante_id == documento && buscar.curso_id == curso)
     if (!duplicate) {
-        listaEstudiante;
+        listaEstudiante = listaEstudiante;
         listaEstudiante.push(estudiante);
         inscribir();
         listaCursosEstudiantes.push(cursoest);
         inscribirCursoEst();
         return 'Inscripción realizada exitosamente.';
     } else {
-        listaEstudiante;
+        listaEstudiante = listaEstudiante;
         return 'El estudiante ya se encuentra matriculado en el curso.';
     }
 });
