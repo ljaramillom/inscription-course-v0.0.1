@@ -51,7 +51,6 @@ hbs.registerHelper('crearCurso', (nombre, codigo, descripcion, modalidad, valor,
     };
     let duplicate = listaCursos.find(buscar => buscar.codigo == codigo)
     if (!duplicate) {
-        listaCursos;
         listaCursos.push(curso);
         guardarCurso();
         return 'Curso creado exitosamente.';
@@ -198,6 +197,7 @@ hbs.registerHelper('mostrarCursosEst', () => {
 // inscripcion
 hbs.registerHelper('inscribirEstudiante', (documento, nombre, apellido, correo, telefono, curso) => {
     listaEstudiante = require('../files/estudiantes.json');
+    listaCursosEstudiantes = require('../files/cursos-estudiantes.json');
     let estudiante = {
         documento: documento,
         nombre: nombre,
@@ -206,13 +206,20 @@ hbs.registerHelper('inscribirEstudiante', (documento, nombre, apellido, correo, 
         telefono: telefono,
         curso: curso,
     };
-    let duplicate = listaEstudiante.find(buscar => buscar.curso == curso)
+    let cursoest = {
+        estudiante_id: documento,
+        curso_id: curso,
+    };
+    let duplicate = listaCursosEstudiantes.find(buscar => buscar.estudiante_id == documento && buscar.curso_id == curso)
     if (!duplicate) {
         listaEstudiante;
         listaEstudiante.push(estudiante);
         inscribir();
+        listaCursosEstudiantes.push(cursoest);
+        inscribirCursoEst();
         return 'Inscripción realizada exitosamente.';
     } else {
+        listaEstudiante;
         return 'El estudiante ya se encuentra matriculado en el curso.';
     }
 });
@@ -233,8 +240,17 @@ const agregarEstCurso = (cod) => {
 
 //guardar inscripcion
 const inscribir = () => {
-    let datos = JSON.stringify(listaEstudiantes);
-    fs.writeFile('./files/estudiantes.json', datos, (error) => {
+    let estudiante = JSON.stringify(listaEstudiantes);
+    fs.writeFile('./files/estudiantes.json', estudiante, (error) => {
+        if (error) throw (error);
+        return;
+    });
+}
+
+//guardar estudiante_id y curso_id
+const inscribirCursoEst = () => {
+    let cursoest = JSON.stringify(listaCursosEstudiantes);
+    fs.writeFile('./files/cursos-estudiantes.json', cursoest, (error) => {
         if (error) throw (error);
         return;
     });
