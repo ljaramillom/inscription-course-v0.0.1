@@ -115,7 +115,7 @@ hbs.registerHelper('mostrarCollapse', () => {
                                     <b>Valor:</b> ${curso.valor}<br>
                                     <b>Estado:</b> ${curso.estado}<br>
                                     <b>Duración(hrs):</b> ${curso.duracion}<br><br>
-                                    <button type="submit" value=${curso.codigo} name=codigo class="btn btn-primary">Cambiar Estado</button>
+                                    <button type="submit" value=${curso.codigo} name=codigo class="btn btn-primary">Cerrado</button>
                                     </div>
                                 </div>
                             </div>`
@@ -135,7 +135,8 @@ function guardarCurso() {
 }
 
 //actualizar estado de curso
-const actualizarCurso = (cod) => {
+
+hbs.registerHelper('actualizarCurso', (cod) => {
     listaCursos = require('../files/cursos.json');
     let curso = listaCursos.find(buscar => buscar.codigo == cod);
     if (!curso) {
@@ -145,7 +146,7 @@ const actualizarCurso = (cod) => {
         guardarCurso();
         return 'Curso actualizado exitosamente.'
     }
-}
+});
 
 // ============ Estudiantes ============ //
 
