@@ -61,10 +61,16 @@ app.post('/list-students', (req, res) => {
     });
 });
 
+app.post('/delete-student', (req, res) => {
+    res.render('delete-student', {
+        documento: req.body.documento,
+    });
+});
+
 app.listen(3000, () => {
     console.log('Server on port ' + 3000);
 });
 
 app.get('*', (req, res) => {
-    res.render('Se ha presentado un error, por favor verifica la ruta e intenta nuevamente.');
+    res.render('error');
 });
