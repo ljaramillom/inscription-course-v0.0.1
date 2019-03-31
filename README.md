@@ -9,6 +9,7 @@ inscription-course
     |--estudiantes.json
 |--hbs
     |--helpers.js
+    |--funciones.js
 |--public
     |--assets
         |--css
@@ -20,6 +21,8 @@ inscription-course
         |--head.hbs
         |--navbar.hbs
     |--create-course.hbs
+    |--delete-student.hbs
+    |--error.hbs
     |--home.hbs
     |--list-students.hbs
     |--register.hbs
