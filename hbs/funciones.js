@@ -3,7 +3,7 @@ listaCursos = [];
 listaEstudiantes = [];
 listaCursosEstudiantes = [];
 
-//listar curso
+// listar curso
 const listarCursos = () => {
     try {
         listaCursos = require('../files/cursos.json');
@@ -12,7 +12,7 @@ const listarCursos = () => {
     }
 }
 
-//listar estudiantes
+// listar estudiantes
 const listarEstudiantes = () => {
     try {
         listaEstudiantes = require('../files/estudiantes.json');
@@ -21,7 +21,7 @@ const listarEstudiantes = () => {
     }
 }
 
-//listar curso por estudiantes
+// listar curso por estudiantes
 const listarCursosEstudiantes = () => {
     try {
         listaCursosEstudiantes = require('../files/cursos-estudiantes.json');
@@ -30,7 +30,7 @@ const listarCursosEstudiantes = () => {
     }
 }
 
-//crear curso
+// crear curso
 const crearCurso = (nombre, codigo, descripcion, modalidad, valor, estado, duracion) => {
     listarCursos();
     let curso = {
@@ -53,7 +53,7 @@ const crearCurso = (nombre, codigo, descripcion, modalidad, valor, estado, durac
     }
 }
 
-//actualizar estado de curso
+// actualizar estado de curso
 const actualizarCurso = (cod) => {
     listarCursos();
     let curso = listaCursos.find(buscar => buscar.codigo == cod);
@@ -122,7 +122,7 @@ const guardar = () => {
     });
 }
 
-//inscribir curso por estudiante
+// inscribir curso por estudiante
 const inscribirCursoEst = () => {
     let datos = JSON.stringify(listaCursosEstudiantes);
     fs.writeFile('./files/cursos-estudiantes.json', datos, (error) => {
@@ -153,6 +153,7 @@ const mostrarInfoCurso = (cod) => {
     }
 }
 
+// eliminar estudiante
 const eliminarEst = (doc) => {
     let index;
     listarEstudiantes();
