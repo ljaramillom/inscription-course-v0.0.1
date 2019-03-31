@@ -22,7 +22,7 @@ hbs.registerHelper('eliminarEstudiante', (doc) => {
 // tabla para listar todos los cursos
 hbs.registerHelper('listarCursos', () => {
     listaCursos = require('../files/cursos.json');
-    let texto = `<table class='table table-bordered'> \ <thead> \ <th> Nombre </th> \ <th> Id </th> \ <th> Descripción </th> \ <th> Modalidad </th> \ <th> Valor </th> \ <th> Estado </th> \ <th> Duración (Horas) </th> \ </thead> \ <tbody>`
+    let texto = `<table class='table table-bordered'> \ <thead> \ <th> Id </th> \ <th> Nombre </th> \ <th> Descripción </th> \ <th> Modalidad </th> \ <th> Valor </th> \ <th> Estado </th> \ <th> Duración (Horas) </th> \ </thead> \ <tbody>`
     listaCursos.forEach(curso => {
         texto = texto +
             `<tr>   <td>${curso.codigo}</td>
