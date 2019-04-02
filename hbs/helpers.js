@@ -163,3 +163,42 @@ hbs.registerHelper('mostrarEstAct', () => {
 hbs.registerHelper('inscribirEstudiante', (documento, nombre, apellido, correo, telefono, curso) => {
     return funciones.inscribirEstudiante(documento, nombre, apellido, correo, telefono, curso);
 });
+
+//listado de cursos con estudiantes inscritos
+hbs.registerHelper('mostrarCursoEst', () => {
+    listaCursosEstudiantes = require('../files/cursos-estudiantes.json');
+    let nombre;
+    let estudiante;
+    let texto = `<ul>`;
+    let i = 1;
+    funciones.mostrarCursoEst().forEach(curso => {
+        nombre = funciones.mostrarInfoCurso(curso.curso_id);
+        estudiante = mostrarEstudiantes(curso.curso_id);
+        texto = texto + `   <dl>
+                            <dt>
+                            <li type="square">Curso: ${nombre}</li>
+                            <dd>Estudiantes:${estudiante}</dd>
+                            </dt>
+                            </dl>`
+    });
+    i = i + 1;
+    texto = texto + `</ul>`
+    return texto;
+});
+
+// mostrar estudiante que pertenezca al curso listado
+const mostrarEstudiantes = (cod) => {
+    listaCursosEstudiantes = require('../files/cursos-estudiantes.json');
+    let estudiantes;
+    let texto = `<ul>`;
+    let i = 1;
+    estudiantes = funciones.listarEstudiantesPorCurso(cod);
+    estudiantes.forEach(estudiante => {
+        let nombreEstudiante = funciones.mostrarInfoEstudiante(estudiante.estudiante_id)
+        texto = texto + `
+                <li type="circle">${nombreEstudiante}</li>`
+    });
+    i = i + 1;
+    texto = texto + `</ul>`
+    return texto;
+}

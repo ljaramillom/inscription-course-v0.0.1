@@ -167,16 +167,24 @@ const eliminarEst = (doc) => {
     }
 }
 
-/* const eliminarEst = (doc) => {
-    listarEstudiantes();
-    let nuevaListaInscritos = listaEstudiantes.filter(buscar => buscar.documento != doc);
-    if (nuevaListaInscritos.length == listaEstudiantes.length) {
-        return 'Error';
-    } else {
-        listaEstudiantes = nuevaListaInscritos;
-        guardar();
-    }
-} */
+// mostrar los cursos con estudiantes inscritos
+const mostrarCursoEst = () => {
+    listarCursosEstudiantes();
+    const resultado = Array.from(new Set(listaCursosEstudiantes.map(s => s.curso_id)))
+        .map(id => {
+            return {
+                curso_id: listaCursosEstudiantes.find(s => s.curso_id === id).curso_id
+            };
+        });
+    return resultado;
+}
+
+// listar estudiantes por curso
+const listarEstudiantesPorCurso = (cod) => {
+    listarCursosEstudiantes();
+    let est = listaCursosEstudiantes.filter(buscar => buscar.curso_id == cod);
+    return est;
+}
 
 module.exports = {
     listarCursos,
@@ -190,5 +198,7 @@ module.exports = {
     inscribirCursoEst,
     mostrarInfoEstudiante,
     mostrarInfoCurso,
-    eliminarEst
+    eliminarEst,
+    listarEstudiantesPorCurso,
+    mostrarCursoEst
 }
