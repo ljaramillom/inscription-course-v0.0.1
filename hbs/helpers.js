@@ -61,7 +61,9 @@ hbs.registerHelper('mostrarCursos', () => {
                                 <div class="card-header" id="heading${i}">
                                     <h5 class="mb-0">
                                         <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse${i}" aria-expanded="true" aria-controls="collapse${i}">
-                                            Curso: ${curso.nombre} 
+                                            Curso: ${curso.nombre} >>
+                                            Descripción: ${curso.descripcion} >>
+                                            Valor: ${curso.valor}
                                         </button>
                                     </h5>
                                 </div>
